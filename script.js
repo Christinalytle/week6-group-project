@@ -1,3 +1,17 @@
+class Movie {
+  constructor(name) {
+    this.name = name; 
+    this.time = ''; 
+    this.auditorium = ''; 
+  }
+
+  addTime(time) {
+    this.time = new Time (time); 
+  }
+}
+
+
+
 
 let movieId = 0; 
 
