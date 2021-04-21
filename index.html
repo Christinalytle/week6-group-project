@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap.css">
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+      <h1 class="text-center">CRUD Movie Theatre</h1>
+      <h2 id="playing">Now Playing:</h2>
+      <div class="container-fluid">
+        <div class="row"id="moviesPlaying">
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="container">
+        <h2>Enter New Movie:</h2>
+        <form class="row">
+          <div class="col-md-12 mb-3">
+            <label for="movieTitle" class="form-label">Movie Title</label>
+            <input type="text" class="form-control" id="movieTitle" placeholder="Example: Die Hard">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="time" class="form-label">Time</label>
+            <input type="text" class="form-control" id="time" placeholder="Example: 3:00pm">
+          </div>
+          <div class="col-md-8 mb-3">
+            <label for="auditorium" class="form-label">Auditorium</label>
+            <input type="text" class="form-control" id="auditorium" placeholder="Auditoirum 1 -10">
+          </div>
+          <div class="col-12">
+            <button type="button" class="btn btn-primary" id="button">Submit</button>
+          </div>
+        </form>
+      </div>
+
+
+      
+          <script src="modules/jquery/dist/jquery.js"></script>
+          <script src="modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+        <script src="script.js"></script>
+    </body>
+</html>
