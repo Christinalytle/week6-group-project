@@ -27,8 +27,48 @@ class Auditorium {
 }
 
 class MovieService {  //Robert
+  static url = "https://crudcrud.com/api/9aa11e480d4346edb21659db01c242b8/crudmovies";
+  
+  static getAllMovies() {
+    return $.get(this.url);
+  }
 
+  getMovie(id) {
+    return $.get(this.url + `/${id}`);
+  }
+
+  static createMovie(movie) {
+    $.post(this.url, movie);
+  };
+
+  static updateMovie(movie) {
+    return $.ajax({
+      url: this.url + `/${movie._id}`,
+      dataType: 'json',
+      data: JSON.stringify(movie),
+      contentType: 'application/json',
+      type: 'PUT'
+    });
+  }
+
+  static deleteMovie(id) {
+    return $.ajax({
+      url: this.url + `/${id}`,
+      type: 'DELETE'
+    });
+  }
+  
 }
+
+
+$('#button-test').on('click', function(){
+  let allMovies = MovieService.getAllMovies();
+  allMovies.then((data) => {
+    console.log(data);
+  });
+  
+});
+
 
 
 class DOMMAnager {  //Paul
@@ -59,4 +99,4 @@ class DOMMAnager {  //Paul
 
 
 
-//Robert test push
+
