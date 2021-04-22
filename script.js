@@ -1,4 +1,3 @@
-
 class Movie {
   //Christina
   constructor(title, auditorium, time) {
@@ -24,11 +23,20 @@ class MovieService {
   static createMovie(movie) {
     return $.ajax({
       url: this.url,
-      type: "POST",
+      type: 'POST',
       crossDomain: true,
       data: JSON.stringify(movie),
-      dataType: "json",
-      contentType: 'application/json'
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function (response) {
+        var resp = JSON.parse(response);
+        alert(resp.status);
+      },
+      error: function (xhr, status) {
+        alert('error');
+      },
+    });
+    
   });
   }
 
@@ -65,6 +73,18 @@ class DOMManager {
     MovieService.getAllMovies().then((movies) => this.render(movies));
   }
 
+  static createMovie(title, auditorium, time) {
+    MovieService.createMovie(new Movie(title, auditorium, time))
+      .then(() => {
+        return MovieService.getAllMovies();
+      })
+      .then((movies) => this.render(movies));
+  }
+
+  static getAllMovies() {
+    MovieService.getAllMovies().then((movies) => this.render(movies));
+  }
+
   static createMovie(name, auditorium, time) {
     MovieService.createMovie(new Movie(name, auditorium, time))
       .then(() => {
@@ -91,6 +111,7 @@ class DOMManager {
           <h5 class="card-title">${movie.auditorium}</h5>
           <p class="card-text">${movie.time}</p>
           <button type="button" class="btn btn-primary delete" onclick="DOMManager.deleteMovie('${movie._id}')">Delete</button>
+          <button type="button" class="btn btn-primary delete" onclick="DOMManager.updateMovie('${movie._id}')">Update</button>
         </div>
       </div>
     </div>`;
@@ -98,6 +119,14 @@ class DOMManager {
     });
   }
 }
+
+$('#button').on('click', () => {
+  let name = $('#movieTitle').val();
+  let auditorium = $('#auditorium').val();
+  let time = $('#time').val();
+  DOMManager.createMovie(name, auditorium, time);
+});
+
 
 $('#submitButton').on('click', () => {
   let name = $('#movieTitle').val();
@@ -107,9 +136,4 @@ $('#submitButton').on('click', () => {
   DOMManager.createMovie(movie);
 });
 
-
-$('#submitButton').on('click', () => {
-  DOMManager.createMovie($(''))
-}
-)
 DOMManager.getAllMovies();
