@@ -1,9 +1,9 @@
 class Movie {
   //Christina
-  constructor(name) {
+  constructor(name, auditorium, time) {
     this.name = name;
-    this.time = time;
     this.auditorium = auditorium;
+    this.time = time;
   }
 }
 
@@ -45,7 +45,7 @@ class MovieService {
 $('#button-test').on('click', function () {
   let allMovies = MovieService.getAllMovies();
   allMovies.then((data) => {
-    console.log(data);
+    this.render(data);
   });
 });
 
@@ -54,17 +54,16 @@ class DOMManager {
   static movies;
 
   static getAllMovies() {
-    let allMovies = MovieService.getAllMovies();
-    allMovies.then((movies) => this.render(movies));
+    MovieService.getAllMovies().then((movies) => this.render(movies));
   }
 
-  // static createMovie(name) {
-  //   MovieService.createMovie(new Movie(name))
-  //     .then(() => {
-  //       return MovieService.getAllMovies();
-  //     })
-  //     .then((movies) => this.render(movies));
-  // }
+  static createMovie(movie) {
+    MovieService.createMovie(movie)
+      .then(() => {
+        return MovieService.getAllMovies();
+      })
+      .then((movies) => this.render(movies));
+  }
 
   static deleteMovie(id) {
     MovieService.deleteMovie(id)
@@ -75,7 +74,8 @@ class DOMManager {
   }
 
   static render(movies) {
-    for (movie of movies) {
+    $('#moviesPlaying').empty();
+    movies.forEach((movie) => {
       let newChild = `<div class="col-sm-3">
       <div class="card" id="newMovie" style="width: 18rem;">
         <h5 class="card-header">${movie.name}</h5>
@@ -87,10 +87,16 @@ class DOMManager {
       </div>
     </div>`;
       $('#moviesPlaying').append(newChild);
-      console.log('the button works');
-    }
+    });
   }
 }
 
+$('#button').on('click', () => {
+  let name = $('#movieTitle').val();
+  let auditorium = $('#auditorium').val();
+  let time = $('#time').val();
+  let movie = new Movie(name, auditorium, time);
+  DOMManager.createMovie(movie);
+});
 // DOMManager.createMovie('Friday');
 DOMManager.getAllMovies();
