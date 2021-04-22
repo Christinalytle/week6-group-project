@@ -1,45 +1,36 @@
-class Movie {   //Christina 
-  constructor(name) {
-    this.name = name; 
-    this.time = ''; 
-    this.auditorium = ''; 
-  }
 
-  addTime(time) {
-    this.time = new Time(time); 
-  }
-
-  addAuditorium(auditorium) {
-    this.auditorium = new Auiditorium(number); 
+class Movie {
+  //Christina
+  constructor(title, auditorium, time) {
+    this.title = title;
+    this.auditorium = auditorium;
+    this.time = time;
   }
 }
 
-class Time {
-  constructor(time) {
-    this.time = time; 
-  }
-}
+class MovieService {
+  //Robert
+  static url =
+    'https://crudcrud.com/api/0dad2e1e6689463f9ec580c7df695fdb/crudmovies';
 
-class Auditorium {
-  constructor(number) {
-    this.number = number; 
-  }
-}
-
-class MovieService {  //Robert
-  static url = "https://crudcrud.com/api/9aa11e480d4346edb21659db01c242b8/crudmovies";
-  
   static getAllMovies() {
     return $.get(this.url);
   }
 
-  getMovie(id) {
+  static getMovie(id) {
     return $.get(this.url + `/${id}`);
   }
 
   static createMovie(movie) {
-    $.post(this.url, movie);
-  };
+    return $.ajax({
+      url: this.url,
+      type: "POST",
+      crossDomain: true,
+      data: JSON.stringify(movie),
+      dataType: "json",
+      contentType: 'application/json'
+  });
+  }
 
   static updateMovie(movie) {
     return $.ajax({
@@ -47,56 +38,78 @@ class MovieService {  //Robert
       dataType: 'json',
       data: JSON.stringify(movie),
       contentType: 'application/json',
-      type: 'PUT'
+      type: 'PUT',
     });
   }
 
   static deleteMovie(id) {
     return $.ajax({
       url: this.url + `/${id}`,
-      type: 'DELETE'
+      type: 'DELETE',
     });
   }
-  
 }
 
-
-$('#button-test').on('click', function(){
+$('#button-test').on('click', function () {
   let allMovies = MovieService.getAllMovies();
   allMovies.then((data) => {
-    console.log(data);
+    this.render(data);
   });
-  
+});
+
+class DOMManager {
+  //Paul
+  static movies;
+
+  static getAllMovies() {
+    MovieService.getAllMovies().then((movies) => this.render(movies));
+  }
+
+  static createMovie(name, auditorium, time) {
+    MovieService.createMovie(new Movie(name, auditorium, time))
+      .then(() => {
+        return MovieService.getAllMovies();
+      })
+      .then((movies) => this.render(movies));
+  }
+
+  static deleteMovie(id) {
+    MovieService.deleteMovie(id)
+      .then(() => {
+        return MovieService.getAllMovies();
+      })
+      .then((movies) => this.render(movies));
+  }
+
+  static render(movies) {
+    $('#moviesPlaying').empty();
+    movies.forEach((movie) => {
+      let newChild = `<div class="col-sm-3">
+      <div class="card" id="newMovie" id="${movie._id} style="width: 18rem;">
+        <h5 class="card-header">${movie.name}</h5>
+        <div class="card-body">
+          <h5 class="card-title">${movie.auditorium}</h5>
+          <p class="card-text">${movie.time}</p>
+          <button type="button" class="btn btn-primary delete" onclick="DOMManager.deleteMovie('${movie._id}')">Delete</button>
+        </div>
+      </div>
+    </div>`;
+      $('#moviesPlaying').append(newChild);
+    });
+  }
+}
+
+$('#submitButton').on('click', () => {
+  let name = $('#movieTitle').val();
+  let auditorium = $('#auditorium').val();
+  let time = $('#time').val();
+  let movie = new Movie(name, auditorium, time);
+  DOMManager.createMovie(movie);
 });
 
 
-
-class DOMMAnager {  //Paul
-  static movies; 
-
-  static render(movies) {
-      let newChild = `<div class="col-sm-3">
-      <div class="card" id="newMovie" style="width: 18rem;">
-        <h5 class="card-header">${$(movieTitle).val()}</h5>
-        <div class="card-body">
-          <h5 class="card-title">${$(auditorium).val()}</h5>
-          <p class="card-text">${$(time).val()}</p>
-          <button type="button" class="btn btn-primary delete" onclick="deleteButton()">Delete</button>
-        </div>
-      </div>
-    </div>`
-    $('#moviesPlaying').append(newChild); 
-    console.log("the button works"); 
-  }
-
-  
-  static deleteMovie() {
-      $('#newMovie').remove(); 
-      console.log("Delete Button Works")
-  } 
+$('#submitButton').on('click', () => {
+  DOMManager.createMovie($(''))
 }
- 
-
-
-
-
+)
+DOMManager.getAllMovies();
