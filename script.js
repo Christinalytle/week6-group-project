@@ -1,7 +1,7 @@
 class Movie {
   //Christina
-  constructor(name, auditorium, time) {
-    this.name = name;
+  constructor(title, auditorium, time) {
+    this.title = title;
     this.auditorium = auditorium;
     this.time = time;
   }
@@ -16,7 +16,7 @@ class MovieService {
     return $.get(this.url);
   }
 
-  getMovie(id) {
+  static getMovie(id) {
     return $.get(this.url + `/${id}`);
   }
 
@@ -36,6 +36,8 @@ class MovieService {
         alert('error');
       },
     });
+    
+  });
   }
 
   static updateMovie(movie) {
@@ -71,6 +73,18 @@ class DOMManager {
     MovieService.getAllMovies().then((movies) => this.render(movies));
   }
 
+  static createMovie(title, auditorium, time) {
+    MovieService.createMovie(new Movie(title, auditorium, time))
+      .then(() => {
+        return MovieService.getAllMovies();
+      })
+      .then((movies) => this.render(movies));
+  }
+
+  static getAllMovies() {
+    MovieService.getAllMovies().then((movies) => this.render(movies));
+  }
+
   static createMovie(name, auditorium, time) {
     MovieService.createMovie(new Movie(name, auditorium, time))
       .then(() => {
@@ -91,7 +105,7 @@ class DOMManager {
     $('#moviesPlaying').empty();
     movies.forEach((movie) => {
       let newChild = `<div class="col-sm-3">
-      <div class="card" id="newMovie" style="width: 18rem;">
+      <div class="card" id="newMovie" id="${movie._id} style="width: 18rem;">
         <h5 class="card-header">${movie.name}</h5>
         <div class="card-body">
           <h5 class="card-title">${movie.auditorium}</h5>
@@ -112,5 +126,14 @@ $('#button').on('click', () => {
   let time = $('#time').val();
   DOMManager.createMovie(name, auditorium, time);
 });
-// DOMManager.createMovie('Friday');
+
+
+$('#submitButton').on('click', () => {
+  let name = $('#movieTitle').val();
+  let auditorium = $('#auditorium').val();
+  let time = $('#time').val();
+  let movie = new Movie(name, auditorium, time);
+  DOMManager.createMovie(movie);
+});
+
 DOMManager.getAllMovies();
