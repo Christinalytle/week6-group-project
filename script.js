@@ -21,7 +21,21 @@ class MovieService {
   }
 
   static createMovie(movie) {
-    $.post(this.url, movie);
+    return $.ajax({
+      url: this.url,
+      type: 'POST',
+      crossDomain: true,
+      data: JSON.stringify(movie),
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function (response) {
+        var resp = JSON.parse(response);
+        alert(resp.status);
+      },
+      error: function (xhr, status) {
+        alert('error');
+      },
+    });
   }
 
   static updateMovie(movie) {
@@ -57,8 +71,8 @@ class DOMManager {
     MovieService.getAllMovies().then((movies) => this.render(movies));
   }
 
-  static createMovie(movie) {
-    MovieService.createMovie(movie)
+  static createMovie(name, auditorium, time) {
+    MovieService.createMovie(new Movie(name, auditorium, time))
       .then(() => {
         return MovieService.getAllMovies();
       })
@@ -83,6 +97,7 @@ class DOMManager {
           <h5 class="card-title">${movie.auditorium}</h5>
           <p class="card-text">${movie.time}</p>
           <button type="button" class="btn btn-primary delete" onclick="DOMManager.deleteMovie('${movie._id}')">Delete</button>
+          <button type="button" class="btn btn-primary delete" onclick="DOMManager.updateMovie('${movie._id}')">Update</button>
         </div>
       </div>
     </div>`;
@@ -95,8 +110,7 @@ $('#button').on('click', () => {
   let name = $('#movieTitle').val();
   let auditorium = $('#auditorium').val();
   let time = $('#time').val();
-  let movie = new Movie(name, auditorium, time);
-  DOMManager.createMovie(movie);
+  DOMManager.createMovie(name, auditorium, time);
 });
 // DOMManager.createMovie('Friday');
 DOMManager.getAllMovies();
