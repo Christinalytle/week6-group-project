@@ -9,8 +9,7 @@ class Movie {
 
 class MovieService {
   //Robert
-  static url =
-    'https://crudcrud.com/api/0dad2e1e6689463f9ec580c7df695fdb/crudmovies';
+  static url ='https://crudcrud.com/api/64da7c3225804fa392c2defd75709aad/crudmovies'; 
 
   static getAllMovies() {
     return $.get(this.url);
@@ -27,18 +26,10 @@ class MovieService {
       crossDomain: true,
       data: JSON.stringify(movie),
       dataType: 'json',
-      contentType: 'application/json',
-      success: function (response) {
-        var resp = JSON.parse(response);
-        alert(resp.status);
-      },
-      error: function (xhr, status) {
-        alert('error');
-      },
+      contentType: 'application/json'
     });
-    
-  });
   }
+    
 
   static updateMovie(movie) {
     return $.ajax({
@@ -57,13 +48,6 @@ class MovieService {
     });
   }
 }
-
-$('#button-test').on('click', function () {
-  let allMovies = MovieService.getAllMovies();
-  allMovies.then((data) => {
-    this.render(data);
-  });
-});
 
 class DOMManager {
   //Paul
@@ -85,8 +69,8 @@ class DOMManager {
     MovieService.getAllMovies().then((movies) => this.render(movies));
   }
 
-  static createMovie(name, auditorium, time) {
-    MovieService.createMovie(new Movie(name, auditorium, time))
+  static createMovie(title, auditorium, time) {
+    MovieService.createMovie(new Movie(title, auditorium, time))
       .then(() => {
         return MovieService.getAllMovies();
       })
@@ -102,11 +86,12 @@ class DOMManager {
   }
 
   static render(movies) {
+    this.movies = movies; 
     $('#moviesPlaying').empty();
     movies.forEach((movie) => {
       let newChild = `<div class="col-sm-3">
       <div class="card" id="newMovie" id="${movie._id} style="width: 18rem;">
-        <h5 class="card-header">${movie.name}</h5>
+        <h5 class="card-header">${movie.title}</h5>
         <div class="card-body">
           <h5 class="card-title">${movie.auditorium}</h5>
           <p class="card-text">${movie.time}</p>
@@ -120,20 +105,12 @@ class DOMManager {
   }
 }
 
-$('#button').on('click', () => {
-  let name = $('#movieTitle').val();
-  let auditorium = $('#auditorium').val();
-  let time = $('#time').val();
-  DOMManager.createMovie(name, auditorium, time);
-});
-
 
 $('#submitButton').on('click', () => {
-  let name = $('#movieTitle').val();
+  let title = $('#movieTitle').val();
   let auditorium = $('#auditorium').val();
   let time = $('#time').val();
-  let movie = new Movie(name, auditorium, time);
-  DOMManager.createMovie(movie);
+  DOMManager.createMovie(title, auditorium, time); 
 });
 
 DOMManager.getAllMovies();
