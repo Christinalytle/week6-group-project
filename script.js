@@ -14,7 +14,7 @@ class Movie {
 class MovieService {
   //Robert
   static url =
-    'https://crudcrud.com/api/b448e9c1cb564baab8a396f34f2e85bf/crudmovies';
+    'https://crudcrud.com/api/e052ece826ee4e69a635967750db2eaa/crudmovies';
 
   static getAllMovies() {
     return $.get(this.url);
@@ -35,12 +35,21 @@ class MovieService {
     });
   }
 
-  static updateMovie(id) {
+  static updateMovie(movie) {
     return $.ajax({
-      url: this.url + `/${id}`,
+      url: this.url + `/${movie._id}`,
       type: 'PUT',
+      crossDomain: true,
       dataType: 'json',
-      data: movie,
+      data: {
+        id: movie._id,
+        title: movie.title,
+        auditorium: movie.auditorium,
+        time: movie.time,
+      },
+      success: function (data) {
+        console.log(data);
+      },
     });
   }
 
@@ -69,33 +78,47 @@ class DOMManager {
   }
 
   static updateMovie(id) {
-    isUpdate = true;
+    let submitArea = document.getElementById('submitArea');
+    let childButton = document.getElementById('submitArea').childNodes[1];
+    let buttonEl = document.createElement('button');
+    buttonEl.classList = 'changeSubmit btn btn-primary';
+    buttonEl.id = 'updateSubmit';
+    buttonEl.innerText = 'Update';
+    submitArea.removeChild(childButton);
+    submitArea.appendChild(buttonEl);
     formTitle.innerText = 'Edit Movie:';
     submitButton.innerText = 'Update';
     changeSubmit.id = 'updateSubmit';
-    console.log(changeSubmit);
     MovieService.getAllMovies().then((movies) => {
       movies.forEach((movie) => {
         if (movie._id == id) {
+          console.log(id);
           document.querySelector('#movieTitle').value = movie.title;
           document.querySelector('#auditorium').value = movie.auditorium;
           document.querySelector('#time').value = movie.time;
-          $('#submitButton').on('click', submitUpdate);
-          function submitUpdate(title, auditorium, time) {
-            console.log(title, auditorium, time);
-          }
+          // $('#submitButton').on('click', submitUpdate);
+          $('#updateSubmit').on('click', () => {
+            let title = $('#movieTitle').val();
+            let auditorium = $('#auditorium').val();
+            let time = $('#time').val();
+            movie._id = id;
+            movie.title = title;
+            movie.auditorium = auditorium;
+            movie.time = time;
+            MovieService.updateMovie(movie)
+              .then(() => {
+                return MovieService.getAllMovies();
+              })
+              .then((movies) => this.render(movies));
+
+            console.log(movies);
+          });
         }
       });
       // MovieService.updateMovie(id);
     });
     // formTitle.innerText = 'Enter New Movie:';
     // submitButton.innerText = 'Submit';
-    $('#updateSubmit').on('click', (e) => {
-      console.log(e.target.id);
-      let title = $('#movieTitle').val();
-      let auditorium = $('#auditorium').val();
-      let time = $('#time').val();
-    });
   }
 
   static deleteMovie(id) {
