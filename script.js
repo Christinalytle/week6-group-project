@@ -14,7 +14,7 @@ class Movie {
 class MovieService {
   //Robert
   static url =
-    'https://crudcrud.com/api/e052ece826ee4e69a635967750db2eaa/crudmovies';
+    'https://crudcrud.com/api/70e7942ac15b4806a16300f4195dfb09/movies';
 
   static getAllMovies() {
     return $.get(this.url);
@@ -41,14 +41,14 @@ class MovieService {
       type: 'PUT',
       crossDomain: true,
       dataType: 'json',
-      data: {
-        id: movie._id,
+      contentType: 'application/json',
+      data: JSON.stringify({
         title: movie.title,
         auditorium: movie.auditorium,
         time: movie.time,
-      },
+      }),
       success: function (data) {
-        console.log(data);
+        console.log("success is: " + data);
       },
     });
   }
@@ -97,21 +97,23 @@ class DOMManager {
           document.querySelector('#auditorium').value = movie.auditorium;
           document.querySelector('#time').value = movie.time;
           // $('#submitButton').on('click', submitUpdate);
-          $('#updateSubmit').on('click', () => {
+          $('#updateSubmit').on('click', (event) => {
             let title = $('#movieTitle').val();
             let auditorium = $('#auditorium').val();
             let time = $('#time').val();
-            movie._id = id;
             movie.title = title;
             movie.auditorium = auditorium;
             movie.time = time;
+            console.log(movie);
+            
             MovieService.updateMovie(movie)
               .then(() => {
                 return MovieService.getAllMovies();
               })
-              .then((movies) => this.render(movies));
+              .then((movies) => this.render(movies)).catch((error) => {console.log("error status is: " + error.status)});
 
             console.log(movies);
+            event.preventDefault();
           });
         }
       });
