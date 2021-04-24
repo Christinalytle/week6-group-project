@@ -16,6 +16,7 @@ class MovieService {
   static url =
     'https://crudcrud.com/api/5f25f2ab0ac04ff69ed9695e01a63941/movies';
 
+
   static getAllMovies() {
     return $.get(this.url);
   }
