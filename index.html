@@ -6,7 +6,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
         <link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap.css">
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
@@ -18,7 +17,8 @@
       </div>
       <br>
       <br>
-      <div class="container">
+      <button type="button" class="getAllMovies btn btn-primary" id="allMovieButton" onclick="DOMManager.reloadPage()">Get Updated Movies</button>
+      <div class="container movieForm">
         <h2 id="formTitle">Enter New Movie:</h2>
         <form class="row">
           <div class="col-md-12 mb-3">
@@ -38,17 +38,15 @@
           </div>
         </form>
       </div>
+    
 
-      <!-- <div>
-        <button type="button" class="btn btn-primary" id="button-test">TEST</button>
-      </div> -->
+
+  
 
 
       
           <script src="modules/jquery/dist/jquery.js"></script>
           <script src="modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
         <script src="script.js"></script>
     </body>
 </html>

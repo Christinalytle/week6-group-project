@@ -14,7 +14,8 @@ class Movie {
 class MovieService {
   //Robert
   static url =
-    'https://crudcrud.com/api/70e7942ac15b4806a16300f4195dfb09/movies';
+    'https://crudcrud.com/api/5f25f2ab0ac04ff69ed9695e01a63941/movies';
+
 
   static getAllMovies() {
     return $.get(this.url);
@@ -105,7 +106,6 @@ class DOMManager {
             movie.auditorium = auditorium;
             movie.time = time;
             console.log(movie);
-            
             MovieService.updateMovie(movie)
               .then(() => {
                 return MovieService.getAllMovies();
@@ -121,6 +121,10 @@ class DOMManager {
     });
     // formTitle.innerText = 'Enter New Movie:';
     // submitButton.innerText = 'Submit';
+  }
+
+  static reloadPage() {
+    location.reload(); 
   }
 
   static deleteMovie(id) {
