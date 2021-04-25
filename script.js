@@ -16,7 +16,6 @@ class MovieService {
   static url =
     'https://crudcrud.com/api/c98a5e292298414e843f6ec4e1dfef0a/movies';
 
-
   static getAllMovies() {
     return $.get(this.url);
   }
@@ -49,7 +48,7 @@ class MovieService {
         time: movie.time,
       }),
       success: function (data) {
-        console.log("success is: " + data);
+        console.log('success is: ' + data);
       },
     });
   }
@@ -106,11 +105,8 @@ class DOMManager {
             movie.auditorium = auditorium;
             movie.time = time;
             console.log(movie);
-            MovieService.updateMovie(movie)
-              .then(() => {
-                return MovieService.getAllMovies();
-              })
-              .then((movies) => this.render(movies)).catch((error) => {console.log("error status is: " + error.status)});
+            MovieService.updateMovie(movie);
+            this.render(movies);
 
             console.log(movies);
             event.preventDefault();
@@ -124,7 +120,7 @@ class DOMManager {
   }
 
   static reloadPage() {
-    location.reload(); 
+    location.reload();
   }
 
   static deleteMovie(id) {
