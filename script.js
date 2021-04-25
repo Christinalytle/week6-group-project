@@ -107,7 +107,7 @@ class DOMManager {
             movie.time = time;
             console.log(movie);
             MovieService.updateMovie(movie);
-            this.render(movies));  
+            this.render(movies);  
             console.log(movies);
             event.preventDefault();
           });
