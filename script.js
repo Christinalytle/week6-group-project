@@ -106,12 +106,8 @@ class DOMManager {
             movie.auditorium = auditorium;
             movie.time = time;
             console.log(movie);
-            MovieService.updateMovie(movie)
-              .then(() => {
-                return MovieService.getAllMovies();
-              })
-              .then((movies) => this.render(movies)).catch((error) => {console.log("error status is: " + error.status)});
-
+            MovieService.updateMovie(movie);
+            this.render(movies));  
             console.log(movies);
             event.preventDefault();
           });
